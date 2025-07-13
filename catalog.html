@@ -10,7 +10,7 @@
   <nav class="main-nav reveal">
     <a href="index.html">Главная</a>
     <a href="catalog.html" class="active">Каталог</a>
-    <a href="dashboard.html">Личный кабинет</a>
+    <a href="profile.html">Мой профиль</a>
     <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
@@ -39,9 +39,7 @@
         <p>Подписка с расширенными функциями</p>
         <span class="price">499₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Telegram Premium', 499)">
-          Добавить в корзину
-        </button>
+        <button onclick="addToCart('Telegram Premium', 499)">Добавить в корзину</button>
       </div>
 
       <div class="product-card reveal">
@@ -60,9 +58,7 @@
         <p>Подписка для улучшенного Discord-опыта</p>
         <span class="price">899₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Discord Nitro', 899)">
-          Добавить в корзину
-        </button>
+        <button onclick="addToCart('Discord Nitro', 899)">Добавить в корзину</button>
       </div>
 
       <div class="product-card reveal">
@@ -71,9 +67,7 @@
         <p>Доступ к привилегиям на сервере</p>
         <span class="price">499₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Роль VIP', 499)">
-          Добавить в корзину
-        </button>
+        <button onclick="addToCart('Роль VIP', 499)">Добавить в корзину</button>
       </div>
 
       <!-- Steam -->
@@ -83,9 +77,7 @@
         <p>Расширенные возможности аккаунта</p>
         <span class="price">749₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Steam PRO', 749)">
-          Добавить в корзину
-        </button>
+        <button onclick="addToCart('Steam PRO', 749)">Добавить в корзину</button>
       </div>
 
       <div class="product-card reveal">
@@ -100,19 +92,19 @@
   </section>
 
   <script>
-    // 1. Плавная загрузка страницы
+    // Плавная загрузка
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
     });
 
-    // 2. Переключатель темы
+    // Переключение темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
-    // 3. Reveal-on-scroll
+    // Reveal-on-scroll эффект
     document.addEventListener('DOMContentLoaded', () => {
       const elems = document.querySelectorAll('.reveal');
       const obs = new IntersectionObserver((entries, o) => {
@@ -126,7 +118,7 @@
       elems.forEach(el => obs.observe(el));
     });
 
-    // 4. Ripple-эффект для кнопок
+    // Ripple на кнопках
     document.querySelectorAll('button').forEach(btn => {
       btn.addEventListener('click', function(e) {
         const circle = document.createElement('span');
@@ -134,23 +126,29 @@
         const rect = this.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         circle.style.width = circle.style.height = size + 'px';
-        circle.style.left = e.clientX - rect.left - size/2 + 'px';
-        circle.style.top = e.clientY - rect.top - size/2 + 'px';
+        circle.style.left = e.clientX - rect.left - size / 2 + 'px';
+        circle.style.top = e.clientY - rect.top - size / 2 + 'px';
         this.appendChild(circle);
         setTimeout(() => circle.remove(), 600);
       });
     });
 
-    // 5. Добавление товара в корзину
+    // Добавление в корзину
     function addToCart(name, price) {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       cart.push({ name, price });
       localStorage.setItem("cart", JSON.stringify(cart));
+
+      const countEl = document.getElementById("cart-count");
+      if (countEl) countEl.textContent = cart.length;
+
       alert(`${name} добавлен в корзину`);
     }
-const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-const countEl = document.getElementById("cart-count");
-if (countEl) countEl.textContent = cartData.length;
+
+    // Счётчик корзины при загрузке
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
   </script>
 </body>
 </html>
