@@ -11,7 +11,7 @@
     <a href="index.html">Главная</a>
     <a href="catalog.html" class="active">Каталог</a>
     <a href="dashboard.html">Личный кабинет</a>
-    <a href="cart.html">Корзина</a>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -148,6 +148,9 @@
       localStorage.setItem("cart", JSON.stringify(cart));
       alert(`${name} добавлен в корзину`);
     }
+const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+const countEl = document.getElementById("cart-count");
+if (countEl) countEl.textContent = cartData.length;
   </script>
 </body>
 </html>
