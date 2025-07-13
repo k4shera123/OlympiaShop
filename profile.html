@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Мой профиль</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="index.html">Главная</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="profile.html" class="active">Мой профиль</a>
+    <a href="admin-panel.html">Админка</a>
+    <button class="theme-toggle">🌙</button>
+    <button id="logout-btn">Выйти</button>
+  </nav>
+
+  <section class="dashboard-section">
+    <h2>👤 Мой профиль</h2>
+    <div id="user-info"></div>
+    <h3>Мои заказы</h3>
+    <div id="my-orders"></div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoCQoZzdcSF2CNw2ajUMKW4Y0e3qMb6Kg",
+      authDomain: "olympiashop-1.firebaseapp.com",
+      projectId: "olympiashop-1",
+      storageBucket: "olympiashop-1.firebasestorage.app",
+      messagingSenderId: "477026699214",
+      appId: "1:477026699214:web:402ee49fc1dd717d32cd9f",
+      measurementId: "G-ZKD290R74J"
+    };
+
+    const ADMIN_EMAIL = "admin@mysite.by";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const userInfo = document.getElementById("user-info");
+    const myOrders = document.getElementById("my-orders");
+
+    // Если не залогинен — на страницу входа
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        showUserInfo(user);
+        showMyOrders(user.email);
+      }
+    });
+
+    // Выход
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      signOut(auth).then(() => window.location.href = "login.html");
+    });
+
+    // Показ данных пользователя
+    function showUserInfo(user) {
+      userInfo.innerHTML = `<p><strong>Email:</strong> ${user.email}</p>`;
+    }
+
+    // Показ только своих заказов
+    function showMyOrders(email) {
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      const filtered = orders.filter(o => o.email === email);
+      if (filtered.length === 0) {
+        myOrders.innerHTML = "<p>У вас нет заказов.</p>";
+        return;
+      }
+      myOrders.innerHTML = filtered
+        .map((order, i) => `
+          <div class="order-block">
+            <h4>Заказ №${i + 1}</h4>
+            <p><strong>Сумма:</strong> ₽${order.total}</p>
+            <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+            <ul>
+              ${order.cart.map(item => `<li>${item.name} — ${item.price}₽</li>`).join("")}
+            </ul>
+          </div>
+        `)
+        .join("");
+    }
+  </script>
+</body>
+</html>
