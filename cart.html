@@ -10,8 +10,8 @@
   <nav class="main-nav">
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
-    <a href="dashboard.html">Личный кабинет</a>
-    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
+    <a href="profile.html">Мой профиль</a>
+    <a href="cart.html" class="active">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -26,9 +26,6 @@
     // Плавная загрузка страницы
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
-const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-const countEl = document.getElementById("cart-count");
-if (countEl) countEl.textContent = cartData.length;
     });
 
     // Переключатель темы
@@ -38,19 +35,23 @@ if (countEl) countEl.textContent = cartData.length;
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
+    // Обновление количества товаров
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
+
     // Отображение корзины
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const list = document.getElementById("cart-list");
     const totalElem = document.getElementById("total");
     let total = 0;
 
     if (!list || !totalElem) {
       console.error("Элементы #cart-list или #total не найдены.");
-    } else if (cart.length === 0) {
+    } else if (cartData.length === 0) {
       list.innerHTML = "<p>Корзина пуста</p>";
-      totalElem.innerText = `Итоговая сумма: ₽0`;
+      totalElem.innerText = "Итоговая сумма: ₽0";
     } else {
-      cart.forEach(item => {
+      cartData.forEach(item => {
         const div = document.createElement("div");
         div.innerHTML = `<p>${item.name} — ${item.price}₽</p>`;
         list.appendChild(div);
