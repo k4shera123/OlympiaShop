@@ -25,7 +25,12 @@
   </footer>
 
   <script>
-    // Переключатель светлой/тёмной темы
+    // 1) Fade-in страницы после полной загрузки
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // 2) Переключатель светлой/тёмной темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
@@ -34,4 +39,3 @@
   </script>
 </body>
 </html>
-
