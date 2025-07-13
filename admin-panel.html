@@ -47,15 +47,16 @@
     const container = document.getElementById("orders-container");
 
     // Проверка авторизации и роли
-    onAuthStateChanged(auth, user => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else if (user.email !== ADMIN_EMAIL) {
-        window.location.href = "dashboard.html";
-      } else {
-        loadOrders();
-      }
-    });
+   onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = "login.html";
+  } else if (user.email !== ADMIN_EMAIL) {
+    window.location.href = "profile.html";
+  } else {
+    loadOrders(); // если всё хорошо — загружаем панель
+  }
+});
+
 
     // Выход из аккаунта
     document.getElementById("logout-btn").addEventListener("click", () => {
