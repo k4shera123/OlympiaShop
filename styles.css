@@ -528,3 +528,12 @@ body.dark .order-block {
   background-color: #222;
   border-color: #333;
 }
+#cart-count {
+  background-color: #ffd700;
+  color: #333;
+  font-weight: bold;
+  padding: 2px 6px;
+  margin-left: 6px;
+  border-radius: 12px;
+  font-size: 0.9em;
+}
