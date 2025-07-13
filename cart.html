@@ -11,7 +11,7 @@
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
     <a href="dashboard.html">Личный кабинет</a>
-    <a href="cart.html" class="active">Корзина</a>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -26,6 +26,9 @@
     // Плавная загрузка страницы
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
+const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+const countEl = document.getElementById("cart-count");
+if (countEl) countEl.textContent = cartData.length;
     });
 
     // Переключатель темы
