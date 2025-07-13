@@ -10,26 +10,23 @@
   <nav class="main-nav">
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
-    <a href="profile.html">Мой профиль</a>
-    <a href="admin-panel.html" class="active">Админка</a>
-    <button class="theme-toggle">🌙</button>
+    <a href="admin-panel.html" class="active">Админ-панель</a>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button id="logout-btn">Выйти</button>
+    <button class="theme-toggle">🌙</button>
   </nav>
 
   <section class="admin-section">
-    <h2>🛠 Панель администратора</h2>
-    <div id="orders-container"></div>
+    <h2>📋 Заказы пользователей</h2>
+    <div id="admin-orders">
+      <p>Загрузка заказов...</p>
+    </div>
   </section>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Конфигурация Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDoCQoZzdcSF2CNw2ajUMKW4Y0e3qMb6Kg",
       authDomain: "olympiashop-1.firebaseapp.com",
@@ -40,58 +37,68 @@
       measurementId: "G-ZKD290R74J"
     };
 
-    const ADMIN_EMAIL = "ponggrous@gmail.com"; // <-- укажи email администратора
+    const ADMIN_EMAIL = "ponggrous@gmail.com";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const container = document.getElementById("orders-container");
 
-    // Проверка авторизации и роли
-   onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.href = "login.html";
-  } else if (user.email !== ADMIN_EMAIL) {
-    window.location.href = "profile.html";
-  } else {
-    loadOrders(); // если всё хорошо — загружаем панель
-  }
-});
+    const ordersContainer = document.getElementById("admin-orders");
 
-
-    // Выход из аккаунта
-    document.getElementById("logout-btn").addEventListener("click", () => {
-      signOut(auth).then(() => {
+    onAuthStateChanged(auth, user => {
+      if (!user) {
         window.location.href = "login.html";
-      });
+      } else if (user.email !== ADMIN_EMAIL) {
+        window.location.href = "profile.html";
+      } else {
+        loadOrders();
+      }
     });
 
-    // Загрузка и отображение заказов из localStorage
     function loadOrders() {
       const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      ordersContainer.innerHTML = "";
+
       if (orders.length === 0) {
-        container.innerHTML = "<p>Заказов нет.</p>";
+        ordersContainer.innerHTML = "<p>Нет заказов</p>";
         return;
       }
-      container.innerHTML = orders
-        .map((order, i) => `
-          <div class="order-block">
-            <h3>Заказ #${i + 1}</h3>
-            <p><strong>Имя:</strong> ${order.name}</p>
-            <p><strong>Email:</strong> ${order.email}</p>
-            <p><strong>ID аккаунта:</strong> ${order.id}</p>
-            <p><strong>Комментарий:</strong> ${order.comment || '—'}</p>
-            <p><strong>Сумма:</strong> ₽${order.total}</p>
-            <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
-            <ul>
-              ${order.cart.map(item => `<li>${item.name} — ${item.price}₽</li>`).join("")}
-            </ul>
-          </div>
-        `)
-        .join("");
+
+      orders.forEach(order => {
+        const block = document.createElement("div");
+        block.className = "order-block";
+        block.innerHTML = `
+          <h3>${order.name} — ${order.email}</h3>
+          <h4>ID: ${order.id}</h4>
+          <p><strong>Товары:</strong> ${order.cart.map(item => item.name).join(", ")}</p>
+          <p><strong>Сумма:</strong> ${order.total}₽</p>
+          <p><strong>Комментарий:</strong> ${order.comment || "—"}</p>
+          <p><em>${new Date(order.createdAt).toLocaleString()}</em></p>
+        `;
+        ordersContainer.appendChild(block);
+      });
     }
-  window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-  });
+
+    // Выход
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      signOut(auth).then(() => window.location.href = "login.html");
+    });
+
+    // Тема
+    const toggleBtn = document.querySelector(".theme-toggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggleBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    });
+
+    // Загрузка корзины
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
+
+    // Плавная загрузка
+    window.addEventListener("load", () => {
+      document.body.classList.add("loaded");
+    });
   </script>
 </body>
 </html>
