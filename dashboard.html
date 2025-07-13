@@ -11,7 +11,7 @@
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
     <a href="dashboard.html" class="active">Личный кабинет</a>
-    <a href="cart.html">Корзина</a>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -88,6 +88,11 @@
     window.addEventListener("click", (e) => {
       if (e.target === modal) closeModal();
     });
+    // 🧮 Обновление количества товаров в корзине
+const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+const countEl = document.getElementById("cart-count");
+if (countEl) countEl.textContent = cartData.length;
+
   </script>
 </body>
 </html>
