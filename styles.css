@@ -516,3 +516,15 @@ body.dark .checkout form button {
   background-color: #555;
   color: #fff;
 }
+.order-block {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
+
+body.dark .order-block {
+  background-color: #222;
+  border-color: #333;
+}
