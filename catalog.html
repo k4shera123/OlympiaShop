@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Каталог товаров</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="dashboard.html">Личный кабинет</a>
+    <a href="catalog.html" class="active">Каталог</a>
+  </nav>
+
+  <section class="catalog">
+    <!-- Фильтры -->
+    <div class="filters">
+      <input type="text" placeholder="Поиск..." />
+      <select>
+        <option>Все категории</option>
+        <option>Telegram</option>
+        <option>Discord</option>
+        <option>Steam</option>
+      </select>
+      <select>
+        <option>Все товары</option>
+        <option>В наличии</option>
+        <option>Нет в наличии</option>
+      </select>
+    </div>
+
+    <!-- Товары -->
+    <div class="product-grid">
+      <!-- Telegram -->
+      <div class="product-card">
+        <img src="images/telegram.jpg" alt="Telegram Premium" />
+        <h4>Telegram Premium</h4>
+        <p>Подписка с расширенными функциями</p>
+        <span class="price">499₽</span>
+        <span class="stock in-stock">В наличии</span>
+        <button>Добавить в корзину</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/telegram2.jpg" alt="Telegram Бот-доступ" />
+        <h4>Доступ к боту</h4>
+        <p>Эксклюзивные команды Telegram-бота</p>
+        <span class="price">199₽</span>
+        <span class="stock out-stock">Нет в наличии</span>
+        <button disabled>Нет в наличии</button>
+      </div>
+
+      <!-- Discord -->
+      <div class="product-card">
+        <img src="images/discord.jpg" alt="Discord Nitro" />
+        <h4>Discord Nitro</h4>
+        <p>Подписка для улучшенного Discord-опыта</p>
+        <span class="price">899₽</span>
+        <span class="stock in-stock">В наличии</span>
+        <button>Добавить в корзину</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/discord2.jpg" alt="Discord VIP" />
+        <h4>Роль VIP</h4>
+        <p>Доступ к привилегиям на сервере</p>
+        <span class="price">499₽</span>
+        <span class="stock in-stock">В наличии</span>
+        <button>Добавить в корзину</button>
+      </div>
+
+      <!-- Steam -->
+      <div class="product-card">
+        <img src="images/steam.jpg" alt="Steam PRO" />
+        <h4>Steam PRO</h4>
+        <p>Расширенные возможности аккаунта</p>
+        <span class="price">749₽</span>
+        <span class="stock in-stock">В наличии</span>
+        <button>Добавить в корзину</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/steam2.jpg" alt="Steam Gift" />
+        <h4>Подарочная игра</h4>
+        <p>Случайная игра в Steam от 300₽</p>
+        <span class="price">300₽</span>
+        <span class="stock out-stock">Нет в наличии</span>
+        <button disabled>Нет в наличии</button>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
