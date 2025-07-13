@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Вход</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="index.html">Главная</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="login.html" class="active">Войти</a>
+    <a href="register.html">Регистрация</a>
+    <button class="theme-toggle">🌙</button>
+  </nav>
+
+  <section class="auth-section">
+    <h2>🔐 Вход</h2>
+    <form id="login-form">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" required />
+
+      <label for="login-password">Пароль</label>
+      <input type="password" id="login-password" required />
+
+      <button type="submit">Войти</button>
+    </form>
+    <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoCQoZzdcSF2CNw2ajUMKW4Y0e3qMb6Kg",
+      authDomain: "olympiashop-1.firebaseapp.com",
+      projectId: "olympiashop-1",
+      storageBucket: "olympiashop-1.firebasestorage.app",
+      messagingSenderId: "477026699214",
+      appId: "1:477026699214:web:402ee49fc1dd717d32cd9f",
+      measurementId: "G-ZKD290R74J"
+    };
+
+    const ADMIN_EMAIL = "admin@mysite.by"; // <-- поменяй на настоящий admin email
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById("login-form").addEventListener("submit", async e => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const pass  = document.getElementById("login-password").value.trim();
+
+      try {
+        const { user } = await signInWithEmailAndPassword(auth, email, pass);
+        // После успешного логина перенаправляем по роли
+        if (user.email === g.kot@students.psu.by) {
+          window.location.href = "admin-panel.html";
+        } else {
+          window.location.href = "dashboard.html";
+        }
+      } catch (err) {
+        alert("Ошибка: " + err.message);
+      }
+    });
+
+    // Если пользователь уже залогинен — сразу редиректим
+    onAuthStateChanged(auth, user => {
+      if (!user) return;
+      if (user.email === ADMIN_EMAIL) {
+        window.location.href = "admin-panel.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
+    });
+  </script>
+</body>
+</html>
