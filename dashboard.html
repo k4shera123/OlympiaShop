@@ -1,18 +1,24 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Личный кабинет</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <nav class="main-nav">
+    <a href="index.html">Главная</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="dashboard.html" class="active">Личный кабинет</a>
+    <button class="theme-toggle">🌙</button>
+  </nav>
+
   <section class="dashboard">
     <h2>Личный кабинет</h2>
 
     <div class="user-info">
-      <img src="https://via.placeholder.com/80" alt="Аватар пользователя" />
+      <img src="https://via.placeholder.com/80" alt="Аватар" />
       <div class="details">
         <p><strong>Имя:</strong> Герман</p>
         <p><strong>Дата регистрации:</strong> 13 июля 2025</p>
@@ -41,37 +47,33 @@
       <p><strong>Ваша реферальная ссылка:</strong> https://mysite.by/r/Herman</p>
     </div>
   </section>
-</body>
-  <!-- Модальное окно -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h3>Пополнение баланса</h3>
-    <p>Чтобы пополнить баланс, отправьте нужную сумму на:</p>
-    <p><strong>Qiwi: +375 (29) 123-45-67</strong></p>
-    <p>В комментарии укажите ваш ID: <strong>#124390</strong></p>
-    <p>После перевода напишите в <a href="https://t.me/support_username" target="_blank">поддержку в Telegram</a></p>
-    <button onclick="closeModal()">Закрыть</button>
+
+  <!-- Модальное окно пополнения -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h3>Пополнение баланса</h3>
+      <p>Чтобы пополнить баланс, отправьте сумму на:</p>
+      <p><strong>Qiwi: +375 (29) 123-45-67</strong></p>
+      <p>В комментарии укажите ваш ID: <strong>#124390</strong></p>
+      <p>После перевода напишите в <a href="https://t.me/support_username" target="_blank">поддержку в Telegram</a></p>
+      <button onclick="closeModal()">Закрыть</button>
+    </div>
   </div>
-</div>
+
   <script>
-  const modal = document.getElementById("modal");
-  const topUpBtn = document.querySelector(".top-up-btn");
+    // Открытие/закрытие модального окна
+    const modal = document.getElementById("modal");
+    const topUpBtn = document.querySelector(".top-up-btn");
+    topUpBtn.addEventListener("click", () => modal.style.display = "block");
+    function closeModal() { modal.style.display = "none"; }
+    window.onclick = (e) => { if (e.target === modal) closeModal(); };
 
-  topUpBtn.addEventListener("click", () => {
-    modal.style.display = "block";
-  });
-
-  function closeModal() {
-    modal.style.display = "none";
-  }
-
-  // Закрытие при клике вне окна
-  window.onclick = function(event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  }
-</script>
+    // Переключатель темы
+    const toggleBtn = document.querySelector('.theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+  </script>
 </body>
 </html>
-
