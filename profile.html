@@ -11,25 +11,59 @@
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
     <a href="profile.html" class="active">Мой профиль</a>
-    <a href="admin-panel.html">Админка</a>
-    <button class="theme-toggle">🌙</button>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button id="logout-btn">Выйти</button>
+    <button class="theme-toggle">🌙</button>
   </nav>
 
   <section class="dashboard-section">
-    <h2>👤 Мой профиль</h2>
-    <div id="user-info"></div>
-    <h3>Мои заказы</h3>
-    <div id="my-orders"></div>
+    <h2>👤 Личный кабинет</h2>
+
+    <div class="user-info">
+      <img src="https://via.placeholder.com/80" alt="Аватар" />
+      <div class="details">
+        <p><strong>Email:</strong> <span id="user-email">—</span></p>
+        <p><strong>Дата регистрации:</strong> <span id="user-created">—</span></p>
+        <p><strong>ID аккаунта:</strong> <span id="user-id">—</span></p>
+      </div>
+    </div>
+
+    <div class="balance">
+      <h3>Ваш баланс: <span>₽1200</span></h3>
+      <p>Вы можете использовать баланс для покупки подписок</p>
+      <button class="top-up-btn">Пополнить</button>
+    </div>
+
+    <div class="order-history">
+      <h3>🧾 История заказов</h3>
+      <ul id="user-orders">
+        <li>Загрузка заказов...</li>
+      </ul>
+    </div>
+
+    <div class="bonuses">
+      <h3>🎁 Купоны и бонусы</h3>
+      <input type="text" placeholder="Введите купон" />
+      <button>Активировать</button>
+      <p><strong>Ваша реферальная ссылка:</strong> https://mysite.by/r/<span id="user-ref">—</span></p>
+    </div>
   </section>
+
+  <!-- Модальное окно пополнения -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h3>Пополнение баланса</h3>
+      <p>Чтобы пополнить баланс, отправьте сумму на:</p>
+      <p><strong>Qiwi: +375 (29) 123-45-67</strong></p>
+      <p>В комментарии укажите ваш ID: <strong id="payment-id">—</strong></p>
+      <p>После перевода напишите в <a href="https://t.me/support_username" target="_blank">поддержку в Telegram</a></p>
+      <button onclick="closeModal()">Закрыть</button>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoCQoZzdcSF2CNw2ajUMKW4Y0e3qMb6Kg",
@@ -41,57 +75,77 @@
       measurementId: "G-ZKD290R74J"
     };
 
-    const ADMIN_EMAIL = "admin@mysite.by";
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const userInfo = document.getElementById("user-info");
-    const myOrders = document.getElementById("my-orders");
 
-    // Если не залогинен — на страницу входа
+    const emailEl   = document.getElementById("user-email");
+    const uidEl     = document.getElementById("user-id");
+    const createdEl = document.getElementById("user-created");
+    const refEl     = document.getElementById("user-ref");
+    const payIdEl   = document.getElementById("payment-id");
+    const ordersEl  = document.getElementById("user-orders");
+
     onAuthStateChanged(auth, user => {
       if (!user) {
         window.location.href = "login.html";
+        return;
+      }
+
+      const email   = user.email;
+      const uid     = user.uid;
+      const created = user.metadata.creationTime;
+
+      emailEl.textContent   = email;
+      uidEl.textContent     = "#" + uid.slice(0, 6).toUpperCase();
+      createdEl.textContent = created.split(",")[0];
+      refEl.textContent     = uid.slice(0, 8);
+      payIdEl.textContent   = "#" + uid.slice(0, 6).toUpperCase();
+
+      // Загружаем заказы только текущего пользователя
+      const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+      const userOrders = allOrders.filter(o => o.email === email);
+
+      ordersEl.innerHTML = "";
+
+      if (userOrders.length === 0) {
+        ordersEl.innerHTML = "<li>У вас пока нет заказов</li>";
       } else {
-        showUserInfo(user);
-        showMyOrders(user.email);
+        userOrders.forEach(order => {
+          const li = document.createElement("li");
+          li.innerHTML = `${order.cart.map(i => i.name).join(", ")} — ${order.total}₽ — <em>${new Date(order.createdAt).toLocaleDateString()}</em>`;
+          ordersEl.appendChild(li);
+        });
       }
     });
 
-    // Выход
+    // Выход из аккаунта
     document.getElementById("logout-btn").addEventListener("click", () => {
       signOut(auth).then(() => window.location.href = "login.html");
     });
 
-    // Показ данных пользователя
-    function showUserInfo(user) {
-      userInfo.innerHTML = `<p><strong>Email:</strong> ${user.email}</p>`;
-    }
+    // Модальное окно Qiwi
+    const modal = document.getElementById("modal");
+    const topUpBtn = document.querySelector(".top-up-btn");
+    topUpBtn.addEventListener("click", () => modal.classList.add("show"));
+    function closeModal() { modal.classList.remove("show"); }
+    window.addEventListener("click", e => { if (e.target === modal) closeModal(); });
 
-    // Показ только своих заказов
-    function showMyOrders(email) {
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      const filtered = orders.filter(o => o.email === email);
-      if (filtered.length === 0) {
-        myOrders.innerHTML = "<p>У вас нет заказов.</p>";
-        return;
-      }
-      myOrders.innerHTML = filtered
-        .map((order, i) => `
-          <div class="order-block">
-            <h4>Заказ №${i + 1}</h4>
-            <p><strong>Сумма:</strong> ₽${order.total}</p>
-            <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
-            <ul>
-              ${order.cart.map(item => `<li>${item.name} — ${item.price}₽</li>`).join("")}
-            </ul>
-          </div>
-        `)
-        .join("");
-    }
-  window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-  });
-</script>
+    // Плавная загрузка
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // Переключение темы
+    const toggleBtn = document.querySelector('.theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // Обновление счётчика корзины
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
+  </script>
 </body>
 </html>
