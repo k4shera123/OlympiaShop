@@ -304,3 +304,29 @@ body.dark .product-card button {
   background-color: #555;
   color: #fff;
 }
+.cart {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.cart h2 {
+  margin-bottom: 20px;
+}
+
+.cart div p {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.cart button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ffd700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
