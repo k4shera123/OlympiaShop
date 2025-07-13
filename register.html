@@ -10,8 +10,9 @@
   <nav class="main-nav">
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
-    <a href="login.html" class="active">Войти</a>
-    <a href="register.html">Регистрация</a>
+    <a href="login.html">Войти</a>
+    <a href="register.html" class="active">Регистрация</a>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -33,7 +34,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Ваши настройки из Firebase Console
     const firebaseConfig = {
       apiKey: "AIzaSyDoCQoZzdcSF2CNw2ajUMKW4Y0e3qMb6Kg",
       authDomain: "olympiashop-1.firebaseapp.com",
@@ -54,15 +54,25 @@
 
       try {
         await createUserWithEmailAndPassword(auth, email, pass);
-        alert("✅ Регистрация успешна! Пожалуйста, войдите.");
-        window.location.href = "login.html";
+        window.location.href = "profile.html";
       } catch (err) {
-        alert("Ошибка: " + err.message);
+        alert("Ошибка регистрации: " + err.message);
       }
     });
-  window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-  });
+
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
+
+    const toggleBtn = document.querySelector(".theme-toggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggleBtn.textContent = document.body.classList.contains('dark') ? "☀️" : "🌙";
+    });
+
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
   </script>
 </body>
 </html>
