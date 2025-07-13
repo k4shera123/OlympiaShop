@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Корзина</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -15,27 +15,26 @@
     <button class="theme-toggle">🌙</button>
   </nav>
 
-  <section class="cart">
-    <h2>🛒 Ваша корзина</h2>
-    <div id="cart-list"></div>
-    <h3 id="total">Итоговая сумма: ₽0</h3>
-    <button onclick="checkoutCart()">Оформить заказ</button>
-  </section>
+  <!-- ... контент страницы корзины ... -->
 
   <script>
-    // Переключение темы
+    // 1) Fade-in страницы после полной загрузки
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // 2) Переключатель темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
-    // Отображение корзины
+    // 3) Логика отображения корзины (если есть)
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const list = document.getElementById("cart-list");
     const totalElem = document.getElementById("total");
     let total = 0;
-
     if (cart.length === 0) {
       list.innerHTML = "<p>Корзина пуста</p>";
     } else {
@@ -47,7 +46,6 @@
       });
       totalElem.innerText = `Итоговая сумма: ₽${total}`;
     }
-
     function checkoutCart() {
       alert("Формирование заказа завершено. Скоро с вами свяжется администратор!");
       localStorage.removeItem("cart");
