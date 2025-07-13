@@ -2,18 +2,19 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Каталог товаров</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <nav class="main-nav">
-    <a href="dashboard.html">Личный кабинет</a>
+    <a href="index.html">Главная</a>
     <a href="catalog.html" class="active">Каталог</a>
+    <a href="dashboard.html">Личный кабинет</a>
+    <button class="theme-toggle">🌙</button>
   </nav>
 
   <section class="catalog">
-    <!-- Фильтры -->
     <div class="filters">
       <input type="text" placeholder="Поиск..." />
       <select>
@@ -29,7 +30,6 @@
       </select>
     </div>
 
-    <!-- Товары -->
     <div class="product-grid">
       <!-- Telegram -->
       <div class="product-card">
@@ -40,9 +40,8 @@
         <span class="stock in-stock">В наличии</span>
         <button>Добавить в корзину</button>
       </div>
-
       <div class="product-card">
-        <img src="images/telegram2.jpg" alt="Telegram Бот-доступ" />
+        <img src="images/telegram2.jpg" alt="Доступ к боту" />
         <h4>Доступ к боту</h4>
         <p>Эксклюзивные команды Telegram-бота</p>
         <span class="price">199₽</span>
@@ -59,9 +58,8 @@
         <span class="stock in-stock">В наличии</span>
         <button>Добавить в корзину</button>
       </div>
-
       <div class="product-card">
-        <img src="images/discord2.jpg" alt="Discord VIP" />
+        <img src="images/discord2.jpg" alt="Роль VIP" />
         <h4>Роль VIP</h4>
         <p>Доступ к привилегиям на сервере</p>
         <span class="price">499₽</span>
@@ -78,9 +76,8 @@
         <span class="stock in-stock">В наличии</span>
         <button>Добавить в корзину</button>
       </div>
-
       <div class="product-card">
-        <img src="images/steam2.jpg" alt="Steam Gift" />
+        <img src="images/steam2.jpg" alt="Подарочная игра" />
         <h4>Подарочная игра</h4>
         <p>Случайная игра в Steam от 300₽</p>
         <span class="price">300₽</span>
@@ -89,5 +86,14 @@
       </div>
     </div>
   </section>
+
+  <script>
+    // Переключатель темы
+    const toggleBtn = document.querySelector('.theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+  </script>
 </body>
 </html>
