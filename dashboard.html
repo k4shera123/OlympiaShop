@@ -11,6 +11,7 @@
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
     <a href="dashboard.html" class="active">Личный кабинет</a>
+    <a href="cart.html">Корзина</a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -61,18 +62,31 @@
   </div>
 
   <script>
-    // Открытие/закрытие модального окна
-    const modal = document.getElementById("modal");
-    const topUpBtn = document.querySelector(".top-up-btn");
-    topUpBtn.addEventListener("click", () => modal.style.display = "block");
-    function closeModal() { modal.style.display = "none"; }
-    window.onclick = (e) => { if (e.target === modal) closeModal(); };
+    // Плавное появление страницы (fade-in)
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
 
     // Переключатель темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // Модальное окно с анимацией (класс .show вместо style.display)
+    const modal = document.getElementById("modal");
+    const topUpBtn = document.querySelector(".top-up-btn");
+    topUpBtn.addEventListener("click", () => {
+      modal.classList.add("show");
+    });
+
+    function closeModal() {
+      modal.classList.remove("show");
+    }
+
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
     });
   </script>
 </body>
