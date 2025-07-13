@@ -40,7 +40,21 @@
 const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
 const countEl = document.getElementById("cart-count");
 if (countEl) countEl.textContent = cartData.length;
-
   </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoCQoZzdcSF2CNw2ajUMKW4Y0e3qMb6Kg",
+    authDomain: "olympiashop-1.firebaseapp.com",
+    projectId: "olympiashop-1",
+    storageBucket: "olympiashop-1.firebasestorage.app",
+    messagingSenderId: "477026699214",
+    appId: "1:477026699214:web:402ee49fc1dd717d32cd9f",
+    measurementId: "G-ZKD290R74J"
+  };
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
