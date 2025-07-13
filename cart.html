@@ -19,7 +19,7 @@
     <h2>🛒 Ваша корзина</h2>
     <div id="cart-list"></div>
     <h3 id="total">Итоговая сумма: ₽0</h3>
-    <button onclick="checkoutCart()">Оформить заказ</button>
+    <button onclick="window.location.href='order.html'">Оформить заказ</button>
   </section>
 
   <script>
@@ -54,12 +54,6 @@
         total += item.price;
       });
       totalElem.innerText = `Итоговая сумма: ₽${total}`;
-    }
-
-    function checkoutCart() {
-      alert("✅ Заказ оформлен! Мы свяжемся с вами в ближайшее время.");
-      localStorage.removeItem("cart");
-      window.location.href = "catalog.html";
     }
   </script>
 </body>
