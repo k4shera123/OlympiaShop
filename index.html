@@ -36,6 +36,11 @@
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
+    // 🧮 Обновление количества товаров в корзине
+const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+const countEl = document.getElementById("cart-count");
+if (countEl) countEl.textContent = cartData.length;
+
   </script>
 </body>
 </html>
