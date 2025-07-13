@@ -10,7 +10,7 @@
   <nav class="main-nav">
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
-    <a href="dashboard.html">Личный кабинет</a>
+    <a href="profile.html">Мой профиль</a>
     <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <a href="order.html" class="active">Оформить заказ</a>
     <button class="theme-toggle">🌙</button>
@@ -45,29 +45,33 @@
   </section>
 
   <script>
-    // Плавное появление
+    // Плавная загрузка
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
     });
 
-    // Переключатель темы
+    // Тема
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
-    // Отображение корзины
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    // Счётчик товаров
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
+
+    // Отображение товаров
     const listEl = document.getElementById("order-list");
     const totalEl = document.getElementById("order-total");
     let total = 0;
 
-    if (cart.length === 0) {
+    if (cartData.length === 0) {
       listEl.innerHTML = "<p>Корзина пуста</p>";
       totalEl.innerText = "Итоговая сумма: ₽0";
     } else {
-      cart.forEach(item => {
+      cartData.forEach(item => {
         const div = document.createElement("div");
         div.className = "summary-item";
         div.innerHTML = `<p>${item.name} — ${item.price}₽</p>`;
@@ -77,7 +81,7 @@
       totalEl.innerText = `Итоговая сумма: ₽${total}`;
     }
 
-    // Обработка формы и сохранение заказа
+    // Обработка отправки заказа
     document.getElementById("order-form").addEventListener("submit", e => {
       e.preventDefault();
 
@@ -87,7 +91,7 @@
       const comment  = document.getElementById("customer-comment").value.trim();
 
       if (!name || !email || !id) {
-        alert("Пожалуйста, заполните все обязательные поля.");
+        alert("⚠️ Пожалуйста, заполните все обязательные поля.");
         return;
       }
 
@@ -96,7 +100,7 @@
         email,
         id,
         comment,
-        cart,
+        cart: cartData,
         total,
         createdAt: new Date().toISOString()
       };
@@ -109,11 +113,6 @@
       localStorage.removeItem("cart");
       window.location.href = "index.html";
     });
-    // 🧮 Обновление количества товаров в корзине
-const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-const countEl = document.getElementById("cart-count");
-if (countEl) countEl.textContent = cartData.length;
-
   </script>
 </body>
 </html>
