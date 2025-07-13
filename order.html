@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Оформление заказа</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="main-nav reveal">
+    <a href="index.html">Главная</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="dashboard.html">Личный кабинет</a>
+    <a href="cart.html">Корзина</a>
+    <a href="order.html" class="active">Оформить заказ</a>
+    <button class="theme-toggle">🌙</button>
+  </nav>
+
+  <section class="checkout reveal">
+    <h2>Оформление заказа</h2>
+
+    <!-- 1) СКЛАД КОРЗИНЫ: сводка по товарам -->
+    <div class="order-summary">
+      <h3>Ваши товары</h3>
+      <div id="order-list"></div>
+      <p class="order-total" id="order-total">Итоговая сумма: ₽0</p>
+    </div>
+
+    <!-- 2) ФОРМА ЗАКАЗА -->
+    <form id="order-form">
+      <label for="customer-name">Имя</label>
+      <input type="text" id="customer-name" required />
+
+      <label for="customer-email">Email</label>
+      <input type="email" id="customer-email" required />
+
+      <label for="customer-id">ID аккаунта</label>
+      <input type="text" id="customer-id" placeholder="#124390" required />
+
+      <label for="customer-comment">Комментарий к заказу</label>
+      <textarea id="customer-comment" placeholder="Например, «Срочно до завтра»"></textarea>
+
+      <button type="submit">Отправить заказ</button>
+    </form>
+  </section>
+
+  <script>
+    // 1) Fade-in страницы
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // 2) Переключатель темы
+    const toggleBtn = document.querySelector('.theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // 3) Подготовка сводки из localStorage
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const listEl = document.getElementById("order-list");
+    const totalEl = document.getElementById("order-total");
+    let total = 0;
+
+    if (cart.length === 0) {
+      listEl.innerHTML = "<p>Корзина пуста</p>";
+      totalEl.innerText = "Итоговая сумма: ₽0";
+    } else {
+      cart.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "summary-item";
+        div.innerHTML = `<p>${item.name} — ${item.price}₽</p>`;
+        listEl.appendChild(div);
+        total += item.price;
+      });
+      totalEl.innerText = `Итоговая сумма: ₽${total}`;
+    }
+
+    // 4) Обработка отправки формы
+    document.getElementById("order-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const name  = document.getElementById("customer-name").value.trim();
+      const email = document.getElementById("customer-email").value.trim();
+      const id    = document.getElementById("customer-id").value.trim();
+
+      if (!name || !email || !id) {
+        alert("Пожалуйста, заполните все обязательные поля.");
+        return;
+      }
+
+      // Здесь можно отправить данные на сервер или телеграм-бота
+
+      alert(`Спасибо, ${name}! Ваш заказ на ₽${total} принят.`);
+      localStorage.removeItem("cart");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
