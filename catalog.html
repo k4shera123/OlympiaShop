@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <nav class="main-nav">
+  <nav class="main-nav reveal">
     <a href="index.html">Главная</a>
     <a href="catalog.html" class="active">Каталог</a>
     <a href="dashboard.html">Личный кабинет</a>
@@ -16,7 +16,7 @@
   </nav>
 
   <section class="catalog">
-    <div class="filters">
+    <div class="filters reveal">
       <input type="text" placeholder="Поиск..." />
       <select>
         <option>Все категории</option>
@@ -33,15 +33,18 @@
 
     <div class="product-grid">
       <!-- Telegram -->
-      <div class="product-card">
+      <div class="product-card reveal">
         <img src="images/telegram.jpg" alt="Telegram Premium" />
         <h4>Telegram Premium</h4>
         <p>Подписка с расширенными функциями</p>
         <span class="price">499₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Telegram Premium', 499)">Добавить в корзину</button>
+        <button onclick="addToCart('Telegram Premium', 499)">
+          Добавить в корзину
+        </button>
       </div>
-      <div class="product-card">
+
+      <div class="product-card reveal">
         <img src="images/telegram2.jpg" alt="Доступ к боту" />
         <h4>Доступ к боту</h4>
         <p>Эксклюзивные команды Telegram-бота</p>
@@ -51,33 +54,41 @@
       </div>
 
       <!-- Discord -->
-      <div class="product-card">
+      <div class="product-card reveal">
         <img src="images/discord.jpg" alt="Discord Nitro" />
         <h4>Discord Nitro</h4>
         <p>Подписка для улучшенного Discord-опыта</p>
         <span class="price">899₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Discord Nitro', 899)">Добавить в корзину</button>
+        <button onclick="addToCart('Discord Nitro', 899)">
+          Добавить в корзину
+        </button>
       </div>
-      <div class="product-card">
+
+      <div class="product-card reveal">
         <img src="images/discord2.jpg" alt="Роль VIP" />
         <h4>Роль VIP</h4>
         <p>Доступ к привилегиям на сервере</p>
         <span class="price">499₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Роль VIP', 499)">Добавить в корзину</button>
+        <button onclick="addToCart('Роль VIP', 499)">
+          Добавить в корзину
+        </button>
       </div>
 
       <!-- Steam -->
-      <div class="product-card">
+      <div class="product-card reveal">
         <img src="images/steam.jpg" alt="Steam PRO" />
         <h4>Steam PRO</h4>
         <p>Расширенные возможности аккаунта</p>
         <span class="price">749₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button onclick="addToCart('Steam PRO', 749)">Добавить в корзину</button>
+        <button onclick="addToCart('Steam PRO', 749)">
+          Добавить в корзину
+        </button>
       </div>
-      <div class="product-card">
+
+      <div class="product-card reveal">
         <img src="images/steam2.jpg" alt="Подарочная игра" />
         <h4>Подарочная игра</h4>
         <p>Случайная игра в Steam от 300₽</p>
@@ -89,14 +100,48 @@
   </section>
 
   <script>
-    // 🎨 Переключатель темы
+    // 1. Плавная загрузка страницы
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // 2. Переключатель темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
-    // 🛒 Добавление товара в корзину
+    // 3. Reveal-on-scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const elems = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            o.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      elems.forEach(el => obs.observe(el));
+    });
+
+    // 4. Ripple-эффект для кнопок
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const circle = document.createElement('span');
+        circle.classList.add('ripple');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        circle.style.width = circle.style.height = size + 'px';
+        circle.style.left = e.clientX - rect.left - size/2 + 'px';
+        circle.style.top = e.clientY - rect.top - size/2 + 'px';
+        this.appendChild(circle);
+        setTimeout(() => circle.remove(), 600);
+      });
+    });
+
+    // 5. Добавление товара в корзину
     function addToCart(name, price) {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       cart.push({ name, price });
