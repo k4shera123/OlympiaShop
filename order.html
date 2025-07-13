@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <nav class="main-nav reveal">
+  <nav class="main-nav">
     <a href="index.html">Главная</a>
     <a href="catalog.html">Каталог</a>
     <a href="dashboard.html">Личный кабинет</a>
@@ -16,17 +16,17 @@
     <button class="theme-toggle">🌙</button>
   </nav>
 
-  <section class="checkout reveal">
+  <section class="checkout">
     <h2>Оформление заказа</h2>
 
-    <!-- 1) СКЛАД КОРЗИНЫ: сводка по товарам -->
+    <!-- Сводка корзины -->
     <div class="order-summary">
       <h3>Ваши товары</h3>
       <div id="order-list"></div>
       <p class="order-total" id="order-total">Итоговая сумма: ₽0</p>
     </div>
 
-    <!-- 2) ФОРМА ЗАКАЗА -->
+    <!-- Форма заказа -->
     <form id="order-form">
       <label for="customer-name">Имя</label>
       <input type="text" id="customer-name" required />
@@ -45,19 +45,19 @@
   </section>
 
   <script>
-    // 1) Fade-in страницы
+    // Плавное появление
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
     });
 
-    // 2) Переключатель темы
+    // Переключатель темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
-    // 3) Подготовка сводки из localStorage
+    // Отображение корзины
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const listEl = document.getElementById("order-list");
     const totalEl = document.getElementById("order-total");
@@ -77,21 +77,35 @@
       totalEl.innerText = `Итоговая сумма: ₽${total}`;
     }
 
-    // 4) Обработка отправки формы
+    // Обработка формы и сохранение заказа
     document.getElementById("order-form").addEventListener("submit", e => {
       e.preventDefault();
-      const name  = document.getElementById("customer-name").value.trim();
-      const email = document.getElementById("customer-email").value.trim();
-      const id    = document.getElementById("customer-id").value.trim();
+
+      const name     = document.getElementById("customer-name").value.trim();
+      const email    = document.getElementById("customer-email").value.trim();
+      const id       = document.getElementById("customer-id").value.trim();
+      const comment  = document.getElementById("customer-comment").value.trim();
 
       if (!name || !email || !id) {
         alert("Пожалуйста, заполните все обязательные поля.");
         return;
       }
 
-      // Здесь можно отправить данные на сервер или телеграм-бота
+      const order = {
+        name,
+        email,
+        id,
+        comment,
+        cart,
+        total,
+        createdAt: new Date().toISOString()
+      };
 
-      alert(`Спасибо, ${name}! Ваш заказ на ₽${total} принят.`);
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+
+      alert(`✅ Заказ на ₽${total} успешно сохранён!`);
       localStorage.removeItem("cart");
       window.location.href = "index.html";
     });
