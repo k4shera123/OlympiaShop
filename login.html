@@ -12,6 +12,7 @@
     <a href="catalog.html">Каталог</a>
     <a href="login.html" class="active">Войти</a>
     <a href="register.html">Регистрация</a>
+    <a href="cart.html">Корзина <span id="cart-count">0</span></a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -43,8 +44,6 @@
       measurementId: "G-ZKD290R74J"
     };
 
-    const ADMIN_EMAIL = "admin@mysite.by"; // <-- поменяй на настоящий admin email
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
@@ -54,31 +53,32 @@
       const pass  = document.getElementById("login-password").value.trim();
 
       try {
-        const { user } = await signInWithEmailAndPassword(auth, email, pass);
-        // После успешного логина перенаправляем по роли
-        if (user.email === "ponggrous@gmail.com") {
-          window.location.href = "admin-panel.html";
-        } else {
-          window.location.href = "profile.html";
-        }
+        await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "profile.html";
       } catch (err) {
-        alert("Ошибка: " + err.message);
+        alert("Ошибка входа: " + err.message);
       }
     });
 
-    // Если пользователь уже залогинен — сразу редиректим
+    // Проверка: если уже залогинен
     onAuthStateChanged(auth, user => {
-      if (!user) return;
-     if (user.email === ADMIN_EMAIL) {
-      window.location.href = "admin-panel.html";
-      } else {
-       window.location.href = "profile.html";
-       }
+      if (user) window.location.href = "profile.html";
     });
-  window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-  });
-</script>
 
+    // Интерфейс
+    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cartData.length;
+
+    const toggleBtn = document.querySelector(".theme-toggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggleBtn.textContent = document.body.classList.contains('dark') ? "☀️" : "🌙";
+    });
+
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+  </script>
 </body>
 </html>
