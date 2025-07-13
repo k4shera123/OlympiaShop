@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Магазин подписок</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="index.html" class="active">Главная</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="dashboard.html">Личный кабинет</a>
+    <button class="theme-toggle">🌙</button>
+  </nav>
+
+  <header class="hero">
+    <h1>Добро пожаловать в магазин подписок</h1>
+    <p>Подписки для Telegram, Discord, Steam — всё в одном месте</p>
+    <a href="catalog.html" class="hero-btn">Перейти в каталог</a>
+  </header>
+
+  <footer>
+    <p>© 2025 — by Герман. Все права защищены.</p>
+  </footer>
+
+  <script>
+    // Переключатель светлой/тёмной темы
+    const toggleBtn = document.querySelector('.theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+  </script>
+</body>
+</html>
 
