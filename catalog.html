@@ -11,6 +11,7 @@
     <a href="index.html">Главная</a>
     <a href="catalog.html" class="active">Каталог</a>
     <a href="dashboard.html">Личный кабинет</a>
+    <a href="cart.html">Корзина</a>
     <button class="theme-toggle">🌙</button>
   </nav>
 
@@ -38,7 +39,7 @@
         <p>Подписка с расширенными функциями</p>
         <span class="price">499₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button>Добавить в корзину</button>
+        <button onclick="addToCart('Telegram Premium', 499)">Добавить в корзину</button>
       </div>
       <div class="product-card">
         <img src="images/telegram2.jpg" alt="Доступ к боту" />
@@ -56,7 +57,7 @@
         <p>Подписка для улучшенного Discord-опыта</p>
         <span class="price">899₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button>Добавить в корзину</button>
+        <button onclick="addToCart('Discord Nitro', 899)">Добавить в корзину</button>
       </div>
       <div class="product-card">
         <img src="images/discord2.jpg" alt="Роль VIP" />
@@ -64,7 +65,7 @@
         <p>Доступ к привилегиям на сервере</p>
         <span class="price">499₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button>Добавить в корзину</button>
+        <button onclick="addToCart('Роль VIP', 499)">Добавить в корзину</button>
       </div>
 
       <!-- Steam -->
@@ -74,7 +75,7 @@
         <p>Расширенные возможности аккаунта</p>
         <span class="price">749₽</span>
         <span class="stock in-stock">В наличии</span>
-        <button>Добавить в корзину</button>
+        <button onclick="addToCart('Steam PRO', 749)">Добавить в корзину</button>
       </div>
       <div class="product-card">
         <img src="images/steam2.jpg" alt="Подарочная игра" />
@@ -88,12 +89,20 @@
   </section>
 
   <script>
-    // Переключатель темы
+    // 🎨 Переключатель темы
     const toggleBtn = document.querySelector('.theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
       toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
+
+    // 🛒 Добавление товара в корзину
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${name} добавлен в корзину`);
+    }
   </script>
 </body>
 </html>
