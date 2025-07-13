@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Все заказы</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="index.html">Главная</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="dashboard.html">Личный кабинет</a>
+    <a href="cart.html">Корзина</a>
+    <a href="admin-orders.html" class="active">Заказы</a>
+    <button class="theme-toggle">🌙</button>
+  </nav>
+
+  <section class="checkout">
+    <h2>📋 Все заказы</h2>
+    <div id="orders-container"></div>
+  </section>
+
+  <script>
+    // Плавная загрузка
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // Переключение темы
+    const toggleBtn = document.querySelector('.theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // Вывод заказов из localStorage
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    const container = document.getElementById("orders-container");
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p>Заказов пока нет.</p>";
+    } else {
+      orders.forEach((order, index) => {
+        const block = document.createElement("div");
+        block.className = "order-block";
+        block.innerHTML = `
+          <h3>Заказ #${index + 1}</h3>
+          <p><strong>Имя:</strong> ${order.name}</p>
+          <p><strong>Email:</strong> ${order.email}</p>
+          <p><strong>ID:</strong> ${order.id}</p>
+          <p><strong>Комментарий:</strong> ${order.comment || '—'}</p>
+          <p><strong>Сумма:</strong> ₽${order.total}</p>
+          <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+          <ul>
+            ${order.cart.map(item => `<li>${item.name} — ${item.price}₽</li>`).join("")}
+          </ul>
+          <hr />
+        `;
+        container.appendChild(block);
+      });
+    }
+  </script>
+</body>
+</html>
